@@ -1,0 +1,26 @@
+# Based on official github/gitignore templates:
+# - Global/macOS.gitignore
+# - Global/VisualStudioCode.gitignore
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+!*.code-workspace
+
+# Claude local settings
+.claude/settings.local.json
+
+# Common local artifacts
+*.log
+.env
+.env.*
+

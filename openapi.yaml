@@ -1,0 +1,210 @@
+openapi: 3.1.0
+info:
+  title: Engineering Leadership Archetype API
+  version: 1.0.0
+  description: >
+    API for scoring an engineering leadership archetype diagnostic and returning
+    a single archetype result, shadow mode, and coaching guidance for use inside
+    a ChatGPT Custom GPT Action.
+servers:
+  - url: https://example.com
+paths:
+  /v1/diagnostic/score:
+    post:
+      operationId: scoreLeadershipArchetype
+      summary: Score an engineering leadership diagnostic
+      description: >
+        Accepts normalized answers or scored observations and returns exactly
+        one archetype result plus supporting analysis.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiagnosticRequest"
+      responses:
+        "200":
+          description: Diagnostic result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiagnosticResult"
+        "400":
+          description: Invalid request
+components:
+  schemas:
+    DiagnosticRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - subject
+        - answers
+      properties:
+        subject:
+          type: object
+          additionalProperties: false
+          properties:
+            name:
+              type: string
+            role_title:
+              type: string
+            company_stage:
+              type: string
+              enum:
+                - startup
+                - scaling
+                - mature
+                - turnaround
+                - reorg
+                - unknown
+            team_condition:
+              type: string
+              enum:
+                - healthy
+                - fragile
+                - rebuilding
+                - high_growth
+                - high_pressure
+                - unknown
+        answers:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/Answer"
+        scoring_overrides:
+          type: object
+          additionalProperties: false
+          properties:
+            people_orientation:
+              type: number
+            results_orientation:
+              type: number
+            change_orientation:
+              type: number
+            stability_orientation:
+              type: number
+            hands_on_technical_involvement:
+              type: number
+            coaching_intensity:
+              type: number
+            directive_force:
+              type: number
+            strategic_leverage:
+              type: number
+    Answer:
+      type: object
+      additionalProperties: false
+      required:
+        - question_id
+        - answer
+      properties:
+        question_id:
+          type: string
+        answer:
+          type: string
+        note:
+          type: string
+    DiagnosticResult:
+      type: object
+      additionalProperties: false
+      required:
+        - archetype
+        - confidence
+        - tagline
+        - definition
+        - ascii_avatar
+        - signature_abilities
+        - why_this_fits
+        - core_leverage
+        - best_fit_contexts
+        - shadow_form
+        - works_well_with
+        - friction_risks
+        - pendulum_read
+        - next_moves
+      properties:
+        archetype:
+          type: string
+          enum:
+            - Guide
+            - Operator
+            - Driver
+            - Catalyst
+            - Builder
+            - Steward
+            - Mentor
+            - Strategist
+        confidence:
+          type: string
+          enum:
+            - High
+            - Medium
+            - Low
+        tagline:
+          type: string
+        definition:
+          type: string
+        ascii_avatar:
+          type: string
+        signature_abilities:
+          type: array
+          minItems: 3
+          maxItems: 3
+          items:
+            type: string
+        why_this_fits:
+          type: array
+          minItems: 3
+          maxItems: 5
+          items:
+            type: string
+        core_leverage:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        best_fit_contexts:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        shadow_form:
+          $ref: "#/components/schemas/ShadowForm"
+        works_well_with:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        friction_risks:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        pendulum_read:
+          type: string
+        next_moves:
+          type: array
+          minItems: 3
+          maxItems: 3
+          items:
+            type: string
+    ShadowForm:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - trigger
+        - behavior
+        - team_impact
+        - recovery
+      properties:
+        name:
+          type: string
+        trigger:
+          type: string
+        behavior:
+          type: string
+        team_impact:
+          type: string
+        recovery:
+          type: string
